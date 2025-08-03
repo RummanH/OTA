@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String @id @default(uuid())
+  username    String @unique
+  email       String @unique
+  phoneNumber String @unique
+
+  password             String
+  passwordConfirm      String
+  passwordChangedAt    DateTime?
+  passwordResetToken   String?
+  passwordResetExpires DateTime?
+  resetToken           String?
+  resetTokenExpiry     DateTime?
+
+  firstName       String
+  lastName        String
+  profileImageUrl String @default("")
+
+  userType UserType @default(B2C)
+  role     UserRole @default(USER)
+
+  lastLogin      DateTime?
+  otpCode        String?
+  otpCodeExpires DateTime?
+
+  companyName    String   @default("")
+  companyAddress String   @default("")
+  district       String   @default("")
+  establishedAt  DateTime?
+  companyLogoUrl String   @default("")
+
+  tradeLicenseNumber   String @default("")
+  tradeLicenseFileUrl  String @default("")
+  tinNumber            String @default("")
+  tinCertificateUrl    String @default("")
+  nidNumber            String @default("")
+  nidFrontUrl          String @default("")
+  nidBackUrl           String @default("")
+  civilAviationCertUrl String @default("")
+
+  twoFactorEnabled Boolean @default(false)
+  twoFactorMethod  String  @default("sms")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum UserType {
+  B2B
+  B2C
+  SubAgent
+  SubUser
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
