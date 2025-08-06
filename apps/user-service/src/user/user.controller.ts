@@ -1,18 +1,21 @@
+// user.controller.ts
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { UserService } from './user.service';
+import { SignupDto } from './dto/signup.dto';
 import { User } from './user.entity';
+import { SigninDto } from './dto/signin.dto';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() user: Partial<User>) {
-    return this.userService.create(user);
+  @Post('signup')
+  create(@Body() body: SignupDto): Promise<Partial<User>> {
+    return this.userService.signup(body);
   }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
+  @Post('signin')
+  async signin(@Body() signinDto: SigninDto) {
+    return this.userService.signin(signinDto);
   }
 }

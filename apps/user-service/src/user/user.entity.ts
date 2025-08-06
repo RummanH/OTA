@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 export enum UserType {
   B2B = 'B2B',
@@ -47,10 +48,10 @@ export class User {
   @Column({ type: 'timestamp', nullable: true })
   resetTokenExpiry: Date;
 
-  @Column()
+  @Column({ default: '' })
   firstName: string;
 
-  @Column()
+  @Column({ default: '' })
   lastName: string;
 
   @Column({ default: '' })
@@ -124,4 +125,10 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @BeforeInsert()
+  async hashPassword() {
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, salt);
+  }
 }

@@ -1,16 +1,6 @@
-import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-  HttpException,
-  HttpStatus,
-  Logger,
-} from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
-import {
-  QueryFailedError,
-  EntityNotFoundError,
-} from 'typeorm';
+import { QueryFailedError, EntityNotFoundError } from 'typeorm';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -28,10 +18,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     if (exception instanceof HttpException) {
       status = exception.getStatus();
       const responseBody = exception.getResponse();
-      message =
-        typeof responseBody === 'string'
-          ? responseBody
-          : (responseBody as any).message || JSON.stringify(responseBody);
+      message = typeof responseBody === 'string' ? responseBody : (responseBody as any).message || JSON.stringify(responseBody);
     }
 
     // Handle TypeORM: Query errors (e.g., duplicate key, null value)
@@ -69,10 +56,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     }
 
     // Log the error
-    this.logger.error(
-      `Error ${status} at ${request.method} ${request.url}`,
-      exception.stack || exception.toString(),
-    );
+    this.logger.error(`Error ${status} at ${request.method} ${request.url}`, exception.stack || exception.toString());
 
     // Final error response
     response.status(status).json({
@@ -80,8 +64,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       timestamp: new Date().toISOString(),
       path: request.url,
       message,
-      stack:
-        process.env.NODE_ENV !== 'production' ? exception.stack : undefined,
+      stack: process.env.NODE_ENV !== 'production' ? exception.stack : undefined,
     });
   }
 }
