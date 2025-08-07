@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { VendorService } from './vendor.service';
 import { VENDOR_PATTERN_SEARCH_FLIGHTS } from '../shared/constants';
@@ -9,14 +9,15 @@ import { searchFlightsDto } from './dto/search.dto';
 export class VendorController {
   constructor(private readonly vendorService: VendorService) {}
 
+  // @HttpCode(204)
   // @MessagePattern(VENDOR_PATTERN_SEARCH_FLIGHTS)
   // async handleFlightSearch(flightSearchRequest: FlightSearchRequest) {
   //   return this.vendorService.searchFlights(flightSearchRequest);
   // }
 
-  @Post('search') // now accessible via HTTP POST
+  @HttpCode(200)
+  @Post('search')
   async handleFlightSearchHttp(@Body() flightSearchRequest: searchFlightsDto) {
-    console.log(flightSearchRequest);
     return this.vendorService.searchFlights(flightSearchRequest);
   }
 }

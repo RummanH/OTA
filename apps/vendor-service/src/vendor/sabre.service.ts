@@ -36,9 +36,6 @@ export class SabreService {
       },
     });
 
-
-    console.log(response)
-
     if (!Array.isArray(response?.data.Payload)) {
       throw new Error('Invalid response format: expected an array');
     }
