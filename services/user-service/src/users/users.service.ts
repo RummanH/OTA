@@ -9,7 +9,12 @@ export class UsersService {
     private userRepository: Repository<UserEntity>,
   ) {}
 
-  async findAll(): Promise<UserEntity[]> {
-    return this.userRepository.find();
+  private users = [
+    { id: '1', name: 'John Doe', email: 'john@example.com' },
+    { id: '2', name: 'Jane Smith', email: 'jane@example.com' },
+  ];
+
+  findAll() {
+    return { users: this.users };
   }
 }

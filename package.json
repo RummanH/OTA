@@ -1,0 +1,28 @@
+{
+  "name": "complete-ota-monorepo",
+  "version": "1.0.0",
+  "description": "complete-ota-monorepo",
+  "scripts": {
+    "install-flight": "npm install --prefix services/flight-service",
+    "install-gateway": "npm install --prefix services/gateway-service",
+    "install-user": "npm install --prefix service/user-service",
+    "install-all": "npm run install-flight && npm run install-gateway && npm run install-user",
+    "flight": "npm run dev --prefix services/flight-service",
+    "gateway": "npm run dev --prefix services/gateway-service",
+    "user": "npm run dev --prefix service/user-service",
+    "dev": "concurrently \"npm run flight\" \"npm run gateway\" \"npm run user\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RummanH/OTA.git"
+  },
+  "author": "Md Jahid Hasan Rumman",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.33.0",
+    "concurrently": "^9.2.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "globals": "^16.3.0",
+    "typescript-eslint": "^8.39.0"
+  }
+}
