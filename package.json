@@ -6,7 +6,7 @@
     "install-flight": "npm install --prefix services/flight-service",
     "install-gateway": "npm install --prefix services/gateway-service",
     "install-user": "npm install --prefix service/user-service",
-    "install-all": "npm run install-flight && npm run install-gateway && npm run install-user",
+    "install-all": "npm run install && npm run install-flight && npm run install-gateway && npm run install-user",
     "flight": "npm run dev --prefix services/flight-service",
     "gateway": "npm run dev --prefix services/gateway-service",
     "user": "npm run dev --prefix service/user-service",
