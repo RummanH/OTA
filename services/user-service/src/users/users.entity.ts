@@ -27,7 +27,7 @@ export class UserEntity {
   @Column({ select: false })
   password: string;
 
-  @Column({ nullable: true, select: false })
+  @Column({ nullable: true, select: false, type: 'varchar' })
   currentHashedRefreshToken?: string | null;
 
   @Column({ nullable: true })

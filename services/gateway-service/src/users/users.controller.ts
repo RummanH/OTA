@@ -1,5 +1,4 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { lastValueFrom, Observable } from 'rxjs';
 import { UsersService } from './users.service';
 
 @Controller('users')

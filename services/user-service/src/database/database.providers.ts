@@ -8,6 +8,7 @@ export const databaseProviders = [
         type: 'postgres',
         url: 'postgresql://postgres.fzydeenysglmqmwoxdhg:rumman103@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres',
         synchronize: true,
+        entities: [__dirname + '/../**/*.entity.{js,ts}'],
       });
 
       return dataSource.initialize();

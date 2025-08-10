@@ -16,13 +16,12 @@ async function bootstrap() {
     transport: Transport.GRPC,
     options: {
       package: 'user',
-      protoPath: path.join(__dirname, '..', '..', '..', 'protos', 'users.proto'),
+      protoPath: path.join(__dirname, '.', 'protos', 'users.proto'),
       protoLoader: '@grpc/proto-loader',
       url: config().grpcURL,
     },
   });
 
-  app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }));
 
   await app.listen();
