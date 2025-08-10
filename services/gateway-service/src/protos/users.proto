@@ -14,7 +14,6 @@ enum UserRole {
   ROLE_ADMIN = 1;
 }
 
-
 message SignupRequest {
   string email = 1;
   string phoneNumber = 2;

@@ -8,7 +8,6 @@ import { ValidationPipe } from '@nestjs/common';
 
 // Own Modules
 import { AppModule } from './app.module';
-import { AllExceptionsFilter } from './common/exceptions';
 import { config } from './config';
 
 async function bootstrap() {
@@ -18,14 +17,14 @@ async function bootstrap() {
       package: 'user',
       protoPath: path.join(__dirname, '.', 'protos', 'users.proto'),
       protoLoader: '@grpc/proto-loader',
-      url: config().grpcURL,
+      url: config().grpcUrl,
     },
   });
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }));
 
   await app.listen();
-  console.log(`🚀 User-service running on gRPC server at ${config().grpcURL}`);
+  console.log(`🚀 User-service running on gRPC server at ${config().grpcUrl}`);
 }
 
 bootstrap();

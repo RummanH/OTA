@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { UserEntity } from './users.entity';
-import { USERS_REPOSITORY } from '../common/constants';
 import { SignupDto } from './dto/signup.dto';
 import { RpcException } from '@nestjs/microservices';
 import { status } from '@grpc/grpc-js';
@@ -10,11 +9,12 @@ import { ConfigService } from '@nestjs/config';
 import { Tokens } from './interfaces/token.interface';
 import { comparePassword, hashValue, parseExpirySeconds } from 'src/common/utils';
 import { SigninDto } from './dto/signin.dto';
+import { config } from 'src/config';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @Inject(USERS_REPOSITORY)
+    @Inject(config().usersRepository)
     private usersRepo: Repository<UserEntity>,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,

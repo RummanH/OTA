@@ -10,7 +10,6 @@ export class UsersController {
 
   @GrpcMethod('UserService', 'Signup')
   signup(data: any) {
-    console.log(data)
     return this.userService.signup(data);
   }
 
