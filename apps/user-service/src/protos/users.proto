@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package user;
+
+service UserService {
+  rpc Register (RegisterUserRequest) returns (UserResponse);
+  rpc Login (LoginUserRequest) returns (UserResponse);
+}
+
+message RegisterUserRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message LoginUserRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message UserResponse {
+  string message = 1;
+  string userId = 2;
+}

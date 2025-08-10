@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { hashPassword } from 'src/common/utils';
 
 export enum UserType {
   B2B = 'B2B',
@@ -14,7 +15,7 @@ export enum UserRole {
 }
 
 @Entity()
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -128,7 +129,8 @@ export class User {
 
   @BeforeInsert()
   async hashPassword() {
-    const salt = await bcrypt.genSalt();
-    this.password = await bcrypt.hash(this.password, salt);
+    const hashedPassword = await hashPassword(this.password);
+    console.log(hashedPassword);
+    this.password = hashedPassword;
   }
 }
