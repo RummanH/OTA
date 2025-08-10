@@ -18,6 +18,7 @@ export class UsersController {
   //   return this.userService.login(payload);
   // }
 
+  @GrpcMethod('UserService', 'getAll')
   getAll() {
     return this.userService.findAll();
   }

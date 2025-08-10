@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert } from 'typeorm';
-import * as bcrypt from 'bcrypt';
-import { hashPassword } from 'src/common/utils';
+import { hashPassword } from '../common/utils';
 
 export enum UserType {
   B2B = 'B2B',
