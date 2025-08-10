@@ -5,11 +5,13 @@
   "scripts": {
     "install-flight": "npm install --prefix services/flight-service",
     "install-gateway": "npm install --prefix services/gateway-service",
-    "install-user": "npm install --prefix service/user-service",
-    "install-all": "npm run install && npm run install-flight && npm run install-gateway && npm run install-user",
+    "install-user": "npm install --prefix services/user-service",
+    "install-all": "npm install && npm run install-flight && npm run install-gateway && npm run install-user",
+    "clean:modules": "rm -rf node_modules services/flight-service/node_modules services/gateway-service/node_modules services/user-service/node_modules",
+    "clean:dist": "rm -rf services/flight-service/dist services/gateway-service/dist services/user-service/dist",
     "flight": "npm run dev --prefix services/flight-service",
     "gateway": "npm run dev --prefix services/gateway-service",
-    "user": "npm run dev --prefix service/user-service",
+    "user": "npm run dev --prefix services/user-service",
     "dev": "concurrently \"npm run flight\" \"npm run gateway\" \"npm run user\""
   },
   "repository": {
