@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert } from 'typeorm';
-import { hashPassword } from '../common/utils';
+import { hashValue } from '../common/utils';
 
 export enum UserType {
   B2B = 'B2B',
@@ -19,16 +19,16 @@ export class UserEntity {
   id: string;
 
   @Column({ unique: true })
-  username: string;
-
-  @Column({ unique: true })
   email: string;
 
   @Column({ unique: true })
   phoneNumber: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
+
+  @Column({ nullable: true, select: false })
+  currentHashedRefreshToken?: string | null;
 
   @Column({ nullable: true })
   passwordConfirm: string;
@@ -128,7 +128,7 @@ export class UserEntity {
 
   @BeforeInsert()
   async hashPassword() {
-    const hashedPassword = await hashPassword(this.password);
+    const hashedPassword = await hashValue(this.password);
     console.log(hashedPassword);
     this.password = hashedPassword;
   }

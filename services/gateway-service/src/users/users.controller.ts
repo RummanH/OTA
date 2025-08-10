@@ -1,12 +1,18 @@
-import { Controller, Get } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { lastValueFrom, Observable } from 'rxjs';
 import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-  @Get()
-  getAllUsers(): Observable<{ users: { id: string; name: string; email: string }[] }> {
-    return this.usersService.getAllUsers()
+
+  @Post('signup')
+  async signup(@Body() signupDto: any) {
+    return this.usersService.signup(signupDto);
+  }
+
+  @Post('login')
+  async login(@Body() loginDto: any) {
+    return this.usersService.login(loginDto);
   }
 }

@@ -14,7 +14,7 @@ import { USER_PACKAGE_NAME, USER_SERVICE_NAME } from 'src/common/constants';
         transport: Transport.GRPC,
         options: {
           package: USER_PACKAGE_NAME,
-          protoPath: path.join(__dirname, '../protos/users.proto'),
+          protoPath: path.join(__dirname, '..', '..', '..', '..', 'protos', 'users.proto'),
           url: 'localhost:5000',
         },
       },
