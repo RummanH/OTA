@@ -1,14 +1,11 @@
-
 syntax = "proto3";
 
 package flight;
 
-
 service FlightService {
-  rpc SearchFlights(FlightSearchRequest) returns (FlightSearchResult);
+  rpc SearchFlights(FlightSearchRequest) returns (FlightSearchResults);
 }
 
-// The request message for searching flights
 message FlightSearchRequest {
   int32 journeyType = 1;
   string origin = 2;
@@ -19,11 +16,14 @@ message FlightSearchRequest {
   int32 noOfInfant = 7;
   int32 noOfChildren = 8;
   int32 noOfAdult = 9;
-  bool isSpecialTexRedumtion = 10;
-  repeated int32 childrenAges = 11; // repeated instead of array | null (empty repeated = null)
+  repeated int32 childrenAges = 11;
 }
 
-// The response message containing flight search results
+message FlightSearchResults {
+  repeated FlightSearchResult results = 1;
+}
+
+
 message FlightSearchResult {
   repeated JourneyDurationInfo journeyDurations = 1;
   repeated FareInfo fareDetails = 2;
@@ -89,5 +89,5 @@ message FlightLeg {
   string cabinClass = 19;
   string baggageAllowance = 20;
   string aircraftType = 21;
-  repeated string baggageDetails = 22; // Assuming array of strings, adjust if needed
+  repeated string baggageDetails = 22;
 }

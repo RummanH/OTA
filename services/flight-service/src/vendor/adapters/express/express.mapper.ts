@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { searchRequestDto } from 'src/vendor/dtos/search-request.dto';
-import { searchResponseDto } from 'src/vendor/dtos/search-response.dto';
+import { searchRequestDto } from 'src/common/dtos/search-request.dto';
+import { searchResponseDto } from 'src/common/dtos/search-response.dto';
 
 @Injectable()
 export class ExpressMapper {

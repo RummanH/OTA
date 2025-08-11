@@ -4,17 +4,18 @@ import { Module } from '@nestjs/common';
 import { FlightsController } from './flights.controller';
 import { FlightsService } from './flights.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { FLIGHT_SERVICE_GRPC_URL, FLIGHT_SERVICE_NAME, FLIGHT_SERVICE_PACKAGE_NAME } from 'src/common/constants';
 
 @Module({
   imports: [
     ClientsModule.register([
       {
-        name: 'FlightService',
+        name: FLIGHT_SERVICE_NAME,
         transport: Transport.GRPC,
         options: {
-          package: 'user',
+          package: FLIGHT_SERVICE_PACKAGE_NAME,
           protoPath: path.join(__dirname, '..', 'protos', 'flights.proto'),
-          url: 'localhost:5001',
+          url: FLIGHT_SERVICE_GRPC_URL,
         },
       },
     ]),

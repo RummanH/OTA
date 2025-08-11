@@ -5,7 +5,7 @@ import { SERVER_PORT } from './common/constants';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   await app.listen(SERVER_PORT);
-  console.log(`User service is running on port: ${SERVER_PORT}`);
+  console.log(`Gateway service is running on port: ${SERVER_PORT}`);
 }
 
 bootstrap();

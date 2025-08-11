@@ -1,10 +1,10 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ExpressConfig } from './express.config';
-import { searchRequestDto } from 'src/vendor/dtos/search-request.dto';
-import { searchResponseDto } from 'src/vendor/dtos/search-response.dto';
 import { ExpressMapper } from './express.mapper';
 import { firstValueFrom } from 'rxjs';
+import { searchRequestDto } from 'src/common/dtos/search-request.dto';
+import { searchResponseDto } from 'src/common/dtos/search-response.dto';
 
 @Injectable()
 export class ExpressClient {
@@ -20,7 +20,7 @@ export class ExpressClient {
     try {
       const expressRequestPayload = this.mapper.mapToExpressRequest(request);
 
-      const response$ = this.http.post<any>(this.config.apiBaseUrl, expressRequestPayload, {
+      const response$ = this.http.post<any>(this.config.apiBaseUrl + '/getFlight', expressRequestPayload, {
         headers: {
           Authorization: `Bearer ${this.config.apiKey}`,
         },

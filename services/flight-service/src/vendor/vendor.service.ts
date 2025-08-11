@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { FlightSearchResult } from '../common/interceptors/response.interface';
 import { ExpressClient } from './adapters/express/express.client';
-import { searchRequestDto } from './dtos/search-request.dto';
-import { searchResponseDto } from './dtos/search-response.dto';
+import { searchRequestDto } from 'src/common/dtos/search-request.dto';
+import { searchResponseDto } from 'src/common/dtos/search-response.dto';
 
 @Injectable()
 export class VendorService {

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from './users/users.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { GrpcToHttpInterceptor } from './common/interceptors/grpc.interceptors';
-import { FlightsService } from './flights/flights.service';
+
+import { UsersModule } from './users/users.module';
 import { FlightsModule } from './flights/flights.module';
+import { GrpcToHttpInterceptor } from './common/interceptors/grpc.interceptors';
 
 @Module({
   imports: [UsersModule, FlightsModule],
@@ -12,8 +12,7 @@ import { FlightsModule } from './flights/flights.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: GrpcToHttpInterceptor,
-    },
-    FlightsService,
+    }
   ],
 })
 export class AppModule {}
