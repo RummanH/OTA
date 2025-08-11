@@ -37,7 +37,6 @@ export class UsersService {
         tokens,
       };
     } catch (err) {
-      console.log(err);
       if (err instanceof RpcException) throw err;
       throw new RpcException({ code: status.INTERNAL, message: 'Signup failed' });
     }
@@ -68,23 +67,18 @@ export class UsersService {
     const refreshExp = this.configService.get<string>('JWT_REFRESH_TOKEN_EXP') || '7d';
 
     const accessToken = await this.jwtService.signAsync(payload, {
-      secret: "dskfkdlsfdslfkdslfkds;lfkds;lfk",
+      secret: 'dskfkdlsfdslfkdslfkds;lfkds;lfk',
       expiresIn: accessExp,
     } as JwtSignOptions);
 
     const refreshToken = await this.jwtService.signAsync(payload, {
-      secret: "hdshfdsfjsdfjsdkfjsdkfajskdlfja",
+      secret: 'hdshfdsfjsdfjsdkfjsdkfajskdlfja',
       expiresIn: refreshExp,
     } as JwtSignOptions);
-
-    const accessExpiresIn = parseExpirySeconds(accessExp);
-    const refreshExpiresIn = parseExpirySeconds(refreshExp);
 
     return {
       accessToken,
       refreshToken,
-      accessExpiresIn,
-      refreshExpiresIn,
     };
   }
 

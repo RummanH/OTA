@@ -4,7 +4,7 @@ import { Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { USER_PACKAGE_NAME, USER_SERVICE_NAME } from 'src/common/constants';
+import { USER_SERVICE_GRPC_URL, USER_SERVICE_NAME, USER_SERVICE_PACKAGE_NAME } from 'src/common/constants';
 
 @Module({
   imports: [
@@ -13,9 +13,9 @@ import { USER_PACKAGE_NAME, USER_SERVICE_NAME } from 'src/common/constants';
         name: USER_SERVICE_NAME,
         transport: Transport.GRPC,
         options: {
-          package: USER_PACKAGE_NAME,
+          package: USER_SERVICE_PACKAGE_NAME,
           protoPath: path.join(__dirname, '..', 'protos', 'users.proto'),
-          url: 'localhost:5000',
+          url: USER_SERVICE_GRPC_URL,
         },
       },
     ]),

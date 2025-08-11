@@ -1,0 +1,93 @@
+
+syntax = "proto3";
+
+package flight;
+
+
+service FlightService {
+  rpc SearchFlights(FlightSearchRequest) returns (FlightSearchResult);
+}
+
+// The request message for searching flights
+message FlightSearchRequest {
+  int32 journeyType = 1;
+  string origin = 2;
+  string destination = 3;
+  string departureDate = 4;
+  string returnDate = 5;
+  string classType = 6;
+  int32 noOfInfant = 7;
+  int32 noOfChildren = 8;
+  int32 noOfAdult = 9;
+  bool isSpecialTexRedumtion = 10;
+  repeated int32 childrenAges = 11; // repeated instead of array | null (empty repeated = null)
+}
+
+// The response message containing flight search results
+message FlightSearchResult {
+  repeated JourneyDurationInfo journeyDurations = 1;
+  repeated FareInfo fareDetails = 2;
+  repeated FlightLeg onwardFlights = 3;
+  repeated FlightLeg returnFlights = 4;
+  double totalDiscount = 5;
+  double totalAit = 6;
+  double totalMarkup = 7;
+  double totalPrice = 8;
+  double baseFare = 9;
+  double ait = 10;
+  string currency = 11;
+  int32 adultCount = 12;
+  int32 childCount = 13;
+  int32 infantCount = 14;
+  bool isRefundable = 15;
+  bool isBookable = 16;
+  double totalTax = 17;
+  string fareType = 18;
+  string tripType = 19;
+  string segmentCode = 20;
+  string internalRefId = 21;
+  string providerKey = 22;
+}
+
+message JourneyDurationInfo {
+  string layoverDuration = 1;
+  string totalDuration = 2;
+  int32 stopCount = 3;
+}
+
+message FareInfo {
+  double discountAmount = 1;
+  double markupFee = 2;
+  double serviceFee = 3;
+  string passengerType = 4;
+  double totalFare = 5;
+  int32 passengerCount = 6;
+  double baseFare = 7;
+  double taxAmount = 8;
+  double ait = 9;
+}
+
+message FlightLeg {
+  string originAirportName = 1;
+  string destinationAirportName = 2;
+  string layoverTime = 3; // nullable string mapped as empty string if null
+  string marketingCarrierCode = 4;
+  string marketingCarrierName = 5;
+  string flightNumber = 6;
+  string originCode = 7;
+  string destinationCode = 8;
+  string departureTime = 9;
+  string arrivalTime = 10;
+  string duration = 11;
+  string operatingCarrierCode = 12;
+  string operatingCarrierName = 13;
+  string operatingFlightNumber = 14;
+  string originTerminal = 15;
+  string destinationTerminal = 16;
+  string bookingClass = 17;
+  string bookingAvailability = 18;
+  string cabinClass = 19;
+  string baggageAllowance = 20;
+  string aircraftType = 21;
+  repeated string baggageDetails = 22; // Assuming array of strings, adjust if needed
+}

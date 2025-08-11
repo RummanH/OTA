@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { SabreService } from './sabre.service';
-import { FlightSearchResult } from './interfaces/response.interface';
-import { searchFlightsDto } from './dto/search.dto';
+import { FlightSearchResult } from '../common/interceptors/response.interface';
+import { ExpressClient } from './adapters/express/express.client';
+import { searchRequestDto } from './dtos/search-request.dto';
+import { searchResponseDto } from './dtos/search-response.dto';
 
 @Injectable()
 export class VendorService {
-  constructor(private readonly sabreService: SabreService) {}
+  constructor(private readonly expressClient: ExpressClient) {}
 
-  async searchFlights(dto: searchFlightsDto): Promise<FlightSearchResult[]> {
-    const sabre = await this.sabreService.search(dto);
-    return [...sabre];
+  async searchFlights(searchDto: searchRequestDto): Promise<searchResponseDto[]> {
+    const expressData = await this.expressClient.searchFlights(searchDto);
+    return [...expressData];
   }
 }

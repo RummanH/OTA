@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import type { ClientGrpc } from '@nestjs/microservices';
 import { USER_SERVICE_NAME } from 'src/common/constants';
-import { IUserService } from '../protos/users.proto';
+import { IUserService } from 'src/common/interfaces/users.proto';
 
 @Injectable()
 export class UsersService {
@@ -14,7 +14,6 @@ export class UsersService {
   }
 
   signup(data: any) {
-    console.log(data);
     return this.userService.Signup(data);
   }
 

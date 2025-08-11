@@ -13,7 +13,7 @@ export enum ClassTypeEnum {
   FIRST = 'First Class',
 }
 
-export class searchFlightsDto {
+export class searchRequestDto {
   @IsEnum(JourneyTypeEnum)
   journeyType: JourneyTypeEnum;
 
@@ -46,9 +46,6 @@ export class searchFlightsDto {
   @IsInt()
   @Min(1)
   noOfAdult: number;
-
-  @IsBoolean()
-  isSpecialTexRedumtion: boolean;
 
   @IsOptional()
   @IsArray()
