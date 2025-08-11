@@ -9,7 +9,6 @@ export class VendorController {
 
   @GrpcMethod('FlightService', 'SearchFlights')
   async getFlightsData(requestDto: searchRequestDto) {
-    const x = await this.vendorService.searchFlights(requestDto);
-    return { results: x };
+    return { results: await this.vendorService.searchFlights(requestDto) };
   }
 }

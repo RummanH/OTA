@@ -1,29 +1,25 @@
-// Core Modules
 import path from 'node:path';
-
-// Third-party Modules
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ValidationPipe } from '@nestjs/common';
-
-// Own Modules
 import { AppModule } from './app.module';
+import { FLIGHT_SERVICE_GRPC_URL, FLIGHT_SERVICE_PACKAGE_NAME } from './common/constants';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
     transport: Transport.GRPC,
     options: {
-      package: 'flight',
+      package: FLIGHT_SERVICE_PACKAGE_NAME,
       protoPath: path.join(__dirname, '.', 'protos', 'flights.proto'),
       protoLoader: '@grpc/proto-loader',
-      url: 'localhost:5001',
+      url: FLIGHT_SERVICE_GRPC_URL,
     },
   });
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }));
 
   await app.listen();
-  console.log(`Flight service is running on gRPC server at localhost:5001`);
+  console.log(`Flight service is running on gRPC server at ${FLIGHT_SERVICE_GRPC_URL}`);
 }
 
 bootstrap();

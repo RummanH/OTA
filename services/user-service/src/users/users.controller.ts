@@ -1,8 +1,8 @@
 import { Controller, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { GrpcMethod, RpcException } from '@nestjs/microservices';
-import { SignupDto } from './dto/signup.dto';
-import { SigninDto } from './dto/signin.dto';
+import { SignupDto } from '../common/dtos/signup.dto';
+import { SigninDto } from '../common/dtos/signin.dto';
 
 @Controller()
 export class UsersController {

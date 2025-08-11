@@ -1,12 +1,10 @@
-import { config } from 'src/config';
+import { USER_REPOSITORY } from 'src/common/constants';
 import { UserEntity } from '../users/users.entity';
 import { DataSource } from 'typeorm';
 
-console.log(config());
-
 export const userProviders = [
   {
-    provide: config().usersRepository,
+    provide: USER_REPOSITORY,
     useFactory: (dataSource: DataSource) => dataSource.getRepository(UserEntity),
     inject: ['DATA_SOURCE'],
   },

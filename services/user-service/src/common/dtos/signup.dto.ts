@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty, MinLength, IsEnum, IsOptional, IsString, Matches } from 'class-validator';
-import { UserType } from '../users.entity';
+import { UserType } from '../../users/users.entity';
 
 export class SignupDto {
   @IsNotEmpty()

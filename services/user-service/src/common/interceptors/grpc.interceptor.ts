@@ -4,7 +4,7 @@ import { catchError } from 'rxjs/operators';
 import { status } from '@grpc/grpc-js';
 
 @Injectable()
-export class GrpcToHttpInterceptor implements NestInterceptor {
+export class GrpcInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       catchError((error) => {

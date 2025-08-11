@@ -1,20 +1,20 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { UserEntity } from './users.entity';
-import { SignupDto } from './dto/signup.dto';
+import { SignupDto } from '../common/dtos/signup.dto';
 import { RpcException } from '@nestjs/microservices';
 import { status } from '@grpc/grpc-js';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { Tokens } from './interfaces/token.interface';
+import { Tokens } from '../common/interfaces/token.interface';
 import { comparePassword, hashValue, parseExpirySeconds } from 'src/common/utils';
-import { SigninDto } from './dto/signin.dto';
-import { config } from 'src/config';
+import { SigninDto } from '../common/dtos/signin.dto';
+import { JWT_ACCESS_SECRET, JWT_ACCESS_TOKEN_EXP, JWT_REFRESH_SECRET, JWT_REFRESH_TOKEN_EXP, USER_REPOSITORY } from 'src/common/constants';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @Inject(config().usersRepository)
+    @Inject(USER_REPOSITORY)
     private usersRepo: Repository<UserEntity>,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
@@ -63,17 +63,14 @@ export class UsersService {
   }
 
   private async generateTokens(payload: { id: string }): Promise<Tokens> {
-    const accessExp = this.configService.get<string>('JWT_ACCESS_TOKEN_EXP') || '15m';
-    const refreshExp = this.configService.get<string>('JWT_REFRESH_TOKEN_EXP') || '7d';
-
     const accessToken = await this.jwtService.signAsync(payload, {
-      secret: 'dskfkdlsfdslfkdslfkds;lfkds;lfk',
-      expiresIn: accessExp,
+      secret: JWT_ACCESS_SECRET,
+      expiresIn: JWT_ACCESS_TOKEN_EXP,
     } as JwtSignOptions);
 
     const refreshToken = await this.jwtService.signAsync(payload, {
-      secret: 'hdshfdsfjsdfjsdkfjsdkfajskdlfja',
-      expiresIn: refreshExp,
+      secret: JWT_REFRESH_SECRET,
+      expiresIn: JWT_REFRESH_TOKEN_EXP,
     } as JwtSignOptions);
 
     return {

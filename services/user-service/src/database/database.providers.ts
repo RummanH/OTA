@@ -1,3 +1,4 @@
+import { DATABASE_TYPE, DATABASE_URL } from 'src/common/constants';
 import { DataSource } from 'typeorm';
 
 export const databaseProviders = [
@@ -5,8 +6,8 @@ export const databaseProviders = [
     provide: 'DATA_SOURCE',
     useFactory: async () => {
       const dataSource = new DataSource({
-        type: 'postgres',
-        url: 'postgresql://postgres.fzydeenysglmqmwoxdhg:rumman103@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres',
+        type: DATABASE_TYPE,
+        url: DATABASE_URL,
         synchronize: true,
         entities: [__dirname + '/../**/*.entity.{js,ts}'],
       });

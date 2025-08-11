@@ -1,4 +1,12 @@
+export const DATABASE_URL = process.env.DATABASE_URL || 'postgresql://postgres.fzydeenysglmqmwoxdhg:rumman103@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres';
+export const DATABASE_TYPE = 'postgres';
+export const GRPC_URL = process.env.GRPC_URL || 'localhost:5000';
+export const JWT_ACCESS_TOKEN_EXP = process.env.JWT_ACCESS_TOKEN_EXP || '15m';
+export const JWT_REFRESH_TOKEN_EXP = process.env.JWT_REFRESH_TOKEN_EXP || '7d';
+export const JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET || 'c515858e5d3accaa691d8179e505448946523614d138fbeeecae5e43cda72684';
+export const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'c515858e5d3accaa691d8179e505448946523614d138fbeeecae5e43cda72684';
 export const SERVER_PORT = Number(process.env.SERVER_PORT) || 3000;
 export const USER_SERVICE_NAME = process.env.USER_SERVICE_NAME || 'UserService';
 export const USER_SERVICE_PACKAGE_NAME = process.env.USER_SERVICE_PACKAGE_NAME || 'user';
+export const USER_REPOSITORY = process.env.USER_REPOSITORY || 'USER_REPOSITORY';
 export const USER_SERVICE_GRPC_URL = process.env.USER_SERVICE_GRPC_URL || 'localhost:5000';

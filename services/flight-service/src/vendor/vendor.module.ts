@@ -5,7 +5,7 @@ import { HttpModule } from '@nestjs/axios';
 import { ExpressModule } from './adapters/express/express.module';
 
 @Module({
-  imports: [HttpModule, ExpressModule],
+  imports: [ExpressModule],
   controllers: [VendorController],
   providers: [VendorService],
 })
