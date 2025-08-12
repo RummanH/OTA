@@ -29,9 +29,7 @@ export class UsersService {
 
       const { id } = await this.usersRepo.save(this.usersRepo.create(signupData));
 
-      const tokens = await this.generateTokens({ id });
-      const hashedRefresh = await hashValue(tokens.refreshToken);
-      await this.setCurrentRefreshToken(hashedRefresh, id);
+  
 
       return {
         tokens,
@@ -50,8 +48,6 @@ export class UsersService {
       }
 
       const tokens = await this.generateTokens({ id: user.id });
-      const hashedRefresh = await hashValue(tokens.refreshToken);
-      await this.setCurrentRefreshToken(hashedRefresh, user.id);
 
       return {
         tokens,
@@ -79,8 +75,20 @@ export class UsersService {
     };
   }
 
-  async setCurrentRefreshToken(hashedToken: string, userId: string): Promise<void> {
-    await this.usersRepo.update(userId, { currentHashedRefreshToken: hashedToken });
+  private async issueTokens(payload: { id: string }) {
+    const accessToken = await this.jwtService.signAsync(payload, {
+      secret: JWT_ACCESS_SECRET,
+      expiresIn: JWT_ACCESS_TOKEN_EXP,
+    });
+
+    const refreshToken = await this.jwtService.signAsync(payload, {
+      secret: JWT_REFRESH_SECRET,
+      expiresIn: JWT_REFRESH_TOKEN_EXP,
+    });
+
+    await this.usersRepo.update(payload.id, { currentHashedRefreshToken: await hashValue(refreshToken) });
+
+    return { accessToken, refreshToken };
   }
 
   async validateCredentials(email: string, plainPassword: string): Promise<Partial<UserEntity> | null> {
@@ -93,15 +101,4 @@ export class UsersService {
 
     return user;
   }
-
-  // async removeRefreshToken(userId: string): Promise<void> {
-  //   await this.usersRepo.update(userId, { currentHashedRefreshToken: null });
-  // }
-
-  // async isRefreshTokenValid(userId: string, refreshToken: string): Promise<boolean> {
-  //   const user = await this.usersRepo.createQueryBuilder('user').addSelect('user.currentHashedRefreshToken').where('user.id = :id', { id: userId }).getOne();
-
-  //   if (!user || !user.currentHashedRefreshToken) return false;
-  //   return bcrypt.compare(refreshToken, user.currentHashedRefreshToken);
-  // }
 }
