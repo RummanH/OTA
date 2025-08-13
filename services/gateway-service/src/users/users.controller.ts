@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { RefreshTokenDto } from 'src/common/dtos/refresh.dto';
 
 @Controller('users')
 export class UsersController {
@@ -13,5 +14,10 @@ export class UsersController {
   @Post('login')
   async login(@Body() loginDto: any) {
     return this.usersService.login(loginDto);
+  }
+
+  @Post('refreshToken')
+  async refreshToken(@Body() RefreshTokenDto: any) {
+    return this.usersService.refresh(RefreshTokenDto);
   }
 }

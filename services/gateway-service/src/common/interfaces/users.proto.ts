@@ -1,3 +1,5 @@
+import { RefreshTokenDto } from '../dtos/refresh.dto';
+
 export enum UserType {
   USER_TYPE_B2B = 0,
   USER_TYPE_B2C = 1,
@@ -38,18 +40,13 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface Tokens {
+export interface AuthResponse {
   accessToken: string;
   refreshToken: string;
-  accessExpiresIn: number;
-  refreshExpiresIn: number;
-}
-
-export interface AuthResponse {
-  tokens: Tokens;
 }
 
 export interface IUserService {
   Signup(request: SignupRequest): Promise<AuthResponse>;
   Login(request: LoginRequest): Promise<AuthResponse>;
+  Refresh(request: RefreshTokenDto): Promise<AuthResponse>;
 }

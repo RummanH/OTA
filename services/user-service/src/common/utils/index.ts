@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt';
 
-export async function comparePassword(rawPassword: string, hashedPassword: string): Promise<boolean> {
-  return bcrypt.compare(rawPassword, hashedPassword);
+export async function valueCompare(rawValue: string, hashedValue: string): Promise<boolean> {
+  return await bcrypt.compare(rawValue, hashedValue);
 }
 
 export async function hashValue(value: string, saltRounds = 12): Promise<string> {

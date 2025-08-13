@@ -3,7 +3,7 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 
 import { UsersModule } from './users/users.module';
 import { FlightsModule } from './flights/flights.module';
-import { GrpcToHttpInterceptor } from './common/interceptors/grpc.interceptors';
+import { ResponseInterceptor } from './common/interceptors/response.interceptors';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
@@ -18,7 +18,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
   providers: [
     {
       provide: APP_INTERCEPTOR,
-      useClass: GrpcToHttpInterceptor,
+      useClass: ResponseInterceptor,
     },
     {
       provide: APP_GUARD,

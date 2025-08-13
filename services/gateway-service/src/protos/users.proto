@@ -42,18 +42,18 @@ message LoginRequest {
   string password = 2;
 }
 
-message Tokens {
+message AuthResponse {
   string accessToken = 1;
   string refreshToken = 2;
-  int64 accessExpiresIn = 3;
-  int64 refreshExpiresIn = 4;
 }
 
-message AuthResponse {
-  Tokens tokens = 1;
+
+message RefreshRequest {
+  string refreshToken = 1;
 }
 
 service UserService {
   rpc Signup(SignupRequest) returns (AuthResponse);
   rpc Login(LoginRequest) returns (AuthResponse);
+  rpc Refresh(RefreshRequest) returns (AuthResponse);
 }

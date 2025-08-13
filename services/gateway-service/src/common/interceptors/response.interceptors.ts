@@ -1,23 +1,38 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 import { status } from '@grpc/grpc-js';
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+
+export interface ResponseFormat<T> {
+  status: boolean;
+  statusCode: number;
+  message: string;
+  payload: T | null;
+}
 
 @Injectable()
-export class GrpcToHttpInterceptor implements NestInterceptor {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+export class ResponseInterceptor<T> implements NestInterceptor<T, ResponseFormat<T>> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<ResponseFormat<T>> {
     return next.handle().pipe(
+      map((response) => {
+        const status = response?.status ?? true;
+        const statusCode = response?.statusCode ?? 200;
+        const message = response?.message ?? 'Request successful';
+        const payload = response?.payload ?? response ?? null;
+
+        return { status, statusCode, message, payload };
+      }),
+
       catchError((error) => {
+        console.log(error)
         const httpStatus = this.mapGrpcCodeToHttp(error.code);
         const message = error.details || this.defaultMessage(error.code);
 
-        if (process.env.NODE_ENV !== 'production') {
-          console.error(`[gRPC → HTTP Interceptor] Caught error:`, JSON.stringify(error, null, 2));
-        }
-
         return throwError(() => ({
+          status: false,
           statusCode: httpStatus,
           message,
+          payload: null,
         }));
       }),
     );

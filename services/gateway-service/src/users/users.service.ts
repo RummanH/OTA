@@ -20,4 +20,8 @@ export class UsersService {
   login(data: any) {
     return this.userService.Login(data);
   }
+
+  refresh(data: any) {
+    return this.userService.Refresh(data);
+  }
 }
