@@ -8,16 +8,16 @@ export class UsersController {
 
   @Post('signup')
   async signup(@Body() signupDto: any) {
-    return this.usersService.signup(signupDto);
+    return await this.usersService.signup(signupDto);
   }
 
   @Post('login')
   async login(@Body() loginDto: any) {
-    return this.usersService.login(loginDto);
+    return await this.usersService.login(loginDto);
   }
 
   @Post('refreshToken')
-  async refreshToken(@Body() RefreshTokenDto: any) {
-    return this.usersService.refresh(RefreshTokenDto);
+  async refreshToken(@Body() refreshTokenDto: RefreshTokenDto) {
+    return await this.usersService.refresh(refreshTokenDto);
   }
 }

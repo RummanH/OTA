@@ -13,15 +13,15 @@ export class UsersService {
     this.userService = this.client.getService<IUserService>(USER_SERVICE_NAME);
   }
 
-  signup(data: any) {
-    return this.userService.Signup(data);
+  async signup(data: any) {
+    return await this.userService.Signup(data);
   }
 
-  login(data: any) {
-    return this.userService.Login(data);
+  async login(data: any) {
+    return await this.userService.Login(data);
   }
 
-  refresh(data: any) {
-    return this.userService.Refresh(data);
+  async refresh(data: any) {
+    return await this.userService.Refresh(data);
   }
 }
