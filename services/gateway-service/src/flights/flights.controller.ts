@@ -1,13 +1,17 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { FlightsService } from './flights.service';
-import { searchRequestDto } from 'src/common/dtos/search-request.dto';
 
 @Controller('flights')
 export class FlightsController {
   constructor(private readonly flightsService: FlightsService) {}
 
-  @Post('getData')
-  async getFlights(@Body() searchDto: any) {
-    return this.flightsService.getFlights(searchDto);
+  @Post('getFlightList')
+  getFlightList(@Body() searchDto: any) {
+    return this.flightsService.getFlightList(searchDto);
+  }
+
+  @Get('getAirports')
+  getAirports(@Query('q') q: string) {
+    return this.flightsService.getAirports(q);
   }
 }

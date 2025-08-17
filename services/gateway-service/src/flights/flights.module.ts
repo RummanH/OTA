@@ -1,21 +1,29 @@
-import path from 'node:path';
+import path, { join } from 'node:path';
 
 import { Module } from '@nestjs/common';
 import { FlightsController } from './flights.controller';
 import { FlightsService } from './flights.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { FLIGHT_SERVICE_GRPC_URL, FLIGHT_SERVICE_NAME, FLIGHT_SERVICE_PACKAGE_NAME } from 'src/common/constants';
 
 @Module({
   imports: [
     ClientsModule.register([
       {
-        name: FLIGHT_SERVICE_NAME,
+        name: 'FLIGHT_SERVICE',
         transport: Transport.GRPC,
         options: {
-          package: FLIGHT_SERVICE_PACKAGE_NAME,
-          protoPath: [path.join(__dirname, '..', 'protos', 'flights.proto'), path.join(__dirname, '..', 'protos', 'airports.proto')],
-          url: FLIGHT_SERVICE_GRPC_URL,
+          package: 'flight',
+          protoPath: join(__dirname, '..', 'protos', 'flights.proto'),
+          url: 'localhost:5001',
+        },
+      },
+      {
+        name: 'AIRPORT_SERVICE',
+        transport: Transport.GRPC,
+        options: {
+          package: 'airport',
+          protoPath: join(__dirname, '..', 'protos', 'airports.proto'),
+          url: 'localhost:5001',
         },
       },
     ]),

@@ -1,18 +1,27 @@
 import { Inject, Injectable } from '@nestjs/common';
 import type { ClientGrpc } from '@nestjs/microservices';
-import { FLIGHT_SERVICE_NAME } from 'src/common/constants';
-import { searchRequestDto } from 'src/common/dtos/search-request.dto';
+import { AirportService } from 'src/common/interfaces/airports.proto';
 
 @Injectable()
 export class FlightsService {
   private flightService: any;
-  constructor(@Inject(FLIGHT_SERVICE_NAME) private readonly client: ClientGrpc) {}
+  private airportService: any;
+
+  constructor(
+    @Inject('FLIGHT_SERVICE') private flightClient: ClientGrpc,
+    @Inject('AIRPORT_SERVICE') private airportClient: ClientGrpc,
+  ) {}
 
   onModuleInit() {
-    this.flightService = this.client.getService<any>(FLIGHT_SERVICE_NAME);
+    this.flightService = this.flightClient.getService<any>('FlightService');
+    this.airportService = this.airportClient.getService<AirportService>('AirportService');
   }
 
-  async getFlights(searchDto: searchRequestDto) {
+  getFlightList(searchDto: any) {
     return this.flightService.SearchFlights(searchDto);
+  }
+
+  getAirports(searchString: string): any {
+    return this.airportService.SearchAirports({ searchString, limit: 10 });
   }
 }
