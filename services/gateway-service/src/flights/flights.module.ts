@@ -14,7 +14,7 @@ import { FLIGHT_SERVICE_GRPC_URL, FLIGHT_SERVICE_NAME, FLIGHT_SERVICE_PACKAGE_NA
         transport: Transport.GRPC,
         options: {
           package: FLIGHT_SERVICE_PACKAGE_NAME,
-          protoPath: path.join(__dirname, '..', 'protos', 'flights.proto'),
+          protoPath: [path.join(__dirname, '..', 'protos', 'flights.proto'), path.join(__dirname, '..', 'protos', 'airports.proto')],
           url: FLIGHT_SERVICE_GRPC_URL,
         },
       },

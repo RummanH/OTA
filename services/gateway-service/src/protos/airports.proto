@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package airport;
+
+service AirportService {
+  rpc CreateAirport(CreateAirportRequest) returns (AirportResponse);
+  rpc GetAirport(GetAirportRequest) returns (AirportResponse);
+  rpc ListAirports(ListAirportsRequest) returns (ListAirportsResponse);
+  rpc UpdateAirport(UpdateAirportRequest) returns (AirportResponse);
+  rpc DeleteAirport(DeleteAirportRequest) returns (AirportResponse);
+  rpc SearchAirports(SearchAirportsRequest) returns (SearchAirportsResponse);
+}
+
+message SearchAirportsRequest {
+  string searchString = 1;
+}
+
+message SearchAirportsResponse {
+  repeated Airport airports = 1;
+}
+
+message Airport {
+  string _id = 1; 
+  string city = 2;
+  string iata = 3;
+  string name = 4;
+}
+
+message CreateAirportRequest {
+  string city = 1;
+  string iata = 2;
+  string name = 3;
+}
+
+message GetAirportRequest {
+  string id = 1;
+}
+
+message ListAirportsRequest {
+  int32 page = 1;
+  int32 limit = 2;
+}
+
+message ListAirportsResponse {
+  repeated Airport airports = 1;
+  int32 total = 2;
+}
+
+message UpdateAirportRequest {
+  string id = 1;
+  string city = 2;
+  string iata = 3;
+  string name = 4;
+}
+
+message DeleteAirportRequest {
+  string id = 1;
+}
+
+message AirportResponse {
+  Airport airport = 1;
+}
