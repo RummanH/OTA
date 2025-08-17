@@ -7,17 +7,17 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post('signup')
-  async signup(@Body() signupDto: any) {
-    return await this.usersService.signup(signupDto);
+  signup(@Body() signupDto: any) {
+    return this.usersService.signup(signupDto);
   }
 
   @Post('login')
-  async login(@Body() loginDto: any) {
-    return await this.usersService.login(loginDto);
+  login(@Body() loginDto: any) {
+    return this.usersService.login(loginDto);
   }
 
   @Post('refreshToken')
-  async refreshToken(@Body() refreshTokenDto: RefreshTokenDto) {
-    return await this.usersService.refresh(refreshTokenDto);
+  refreshToken(@Body() refreshTokenDto: RefreshTokenDto) {
+    return this.usersService.refreshToken(refreshTokenDto);
   }
 }

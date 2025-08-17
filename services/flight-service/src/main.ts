@@ -1,25 +1,42 @@
 import path from 'node:path';
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
-import { FLIGHT_SERVICE_GRPC_URL, FLIGHT_SERVICE_PACKAGE_NAME } from './common/constants';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { AllExceptionsFilter } from './common/filters/all-exception';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
+  const app = await NestFactory.create(AppModule);
+
+  const configService = app.get(ConfigService);
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
+
+  app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalInterceptors(new LoggingInterceptor());
+
+  // Create gRPC microservice
+  const grpcApp = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
     transport: Transport.GRPC,
     options: {
-      package: [FLIGHT_SERVICE_PACKAGE_NAME, 'airport'],
-      protoPath: [path.join(__dirname, '.', 'protos', 'flights.proto'), path.join(__dirname, '.', 'protos', 'airports.proto')],
-      protoLoader: '@grpc/proto-loader',
-      url: FLIGHT_SERVICE_GRPC_URL,
+      package: ['flight', 'airport'],
+      protoPath: [path.join(__dirname, 'protos', 'flights.proto'), path.join(__dirname, 'protos', 'airports.proto')],
+      url: configService.get<string>('FLIGHT_SERVICE_GRPC_URL'),
     },
   });
 
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }));
+  grpcApp.enableShutdownHooks();
 
-  await app.listen();
-  console.log(`Flight service is running on gRPC server at ${FLIGHT_SERVICE_GRPC_URL}`);
+  await grpcApp.listen();
+  console.log(`Flight service is running on gRPC at ${configService.get<string>('FLIGHT_SERVICE_GRPC_URL')}`);
 }
 
 bootstrap();

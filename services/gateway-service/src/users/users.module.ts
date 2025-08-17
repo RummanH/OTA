@@ -1,22 +1,25 @@
 import path from 'node:path';
-
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { USER_SERVICE_GRPC_URL, USER_SERVICE_NAME, USER_SERVICE_PACKAGE_NAME } from 'src/common/constants';
 
 @Module({
   imports: [
-    ClientsModule.register([
+    ClientsModule.registerAsync([
       {
-        name: USER_SERVICE_NAME,
-        transport: Transport.GRPC,
-        options: {
-          package: USER_SERVICE_PACKAGE_NAME,
-          protoPath: path.join(__dirname, '..', 'protos', 'users.proto'),
-          url: USER_SERVICE_GRPC_URL,
-        },
+        name: 'USER_SERVICE',
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.GRPC,
+          options: {
+            package: 'user',
+            protoPath: path.join(__dirname, '..', 'protos', 'users.proto'),
+            url: configService.get<string>('USER_SERVICE_GRPC_URL'),
+          },
+        }),
       },
     ]),
   ],
