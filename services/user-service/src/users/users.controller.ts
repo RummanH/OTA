@@ -4,6 +4,7 @@ import { GrpcMethod, RpcException } from '@nestjs/microservices';
 import { SignupDto } from '../common/dtos/signup.dto';
 import { SigninDto } from '../common/dtos/signin.dto';
 import { RefreshTokenDto } from 'src/common/dtos/refresh.dto';
+import { status } from '@grpc/grpc-js';
 
 @Controller()
 export class UsersController {

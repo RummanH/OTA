@@ -61,7 +61,7 @@ export class UsersService {
     }
   }
 
-  async login(data: SigninDto) {
+  async login(data: any) {
     try {
       const user = await this.validateCredentials(data.email, data.password);
       if (!user?.id) {

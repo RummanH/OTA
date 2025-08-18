@@ -1,6 +1,7 @@
-import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post, Res } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { RefreshTokenDto } from 'src/common/dtos/refresh.dto';
+import type { Response } from 'express';
 
 @Controller('users')
 export class UsersController {

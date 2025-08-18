@@ -13,14 +13,14 @@ export class UsersService {
   }
 
   async signup(data: any) {
-    return await this.userService.Signup(data);
+    return this.userService.Signup(data);
   }
 
-  async login(data: any) {
-    return await this.userService.Login(data);
+  login(data: any) {
+    return this.userService.Login(data);
   }
 
-  async refreshToken(data: any) {
-    return await this.userService.Refresh(data);
+  refreshToken(data: any) {
+    return this.userService.Refresh(data);
   }
 }
