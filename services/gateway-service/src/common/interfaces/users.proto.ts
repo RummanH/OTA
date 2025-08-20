@@ -46,7 +46,7 @@ export interface AuthResponse {
 }
 
 export interface IUserService {
-  Signup(request: SignupRequest): Promise<AuthResponse>;
+  SignUp(request: SignupRequest): Promise<AuthResponse>;
   Login(request: LoginRequest): Promise<AuthResponse>;
   Refresh(request: RefreshTokenDto): Promise<AuthResponse>;
   ForgotPassword(request: any): Promise<any>;

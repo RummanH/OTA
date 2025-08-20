@@ -11,6 +11,7 @@ import { JWT_ACCESS_SECRET, JWT_ACCESS_TOKEN_EXP, JWT_REFRESH_SECRET, JWT_REFRES
 import { ForgotDto } from 'src/common/dtos/forgot.dto';
 import { randomBytes } from 'node:crypto';
 import { ResetPasswordDto } from 'src/common/dtos/reset-password.dto';
+import { ResponseBuilder } from 'src/common/utils/base.response';
 
 @Injectable()
 export class UsersService {
@@ -22,17 +23,18 @@ export class UsersService {
 
   async signup(signupData: SignupDto) {
     try {
-      const isUserExist = await this.usersRepo.findOne({
+      const isUserExist = await this.usersRepo.exists({
         where: [{ email: signupData.email }, { phoneNumber: signupData.phoneNumber }],
       });
 
       if (isUserExist) {
-        throw new RpcException({ code: status.ALREADY_EXISTS, message: 'Email or phone number already exists' });
+        throw new RpcException({ status: status.ALREADY_EXISTS, message: 'Email or phone number already exists' });
       }
 
       const { id } = await this.usersRepo.save(this.usersRepo.create(signupData));
 
-      return await this.issueTokens({ id });
+      const tokens = await this.issueTokens({ id });
+      return new ResponseBuilder().status(201).message('Welcome aboard! Your account has been created. Log in now to get started.').data(tokens).build();
     } catch (err) {
       if (err instanceof RpcException) throw err;
       throw new RpcException({ code: status.INTERNAL, message: 'Signup failed' });
@@ -53,16 +55,13 @@ export class UsersService {
       }
 
       const resetToken = randomBytes(32).toString('hex');
+
       existingUser.passwordResetToken = resetToken;
-      // existingUser.passwordResetExpires = new Date(Date.now() + 1000 * 60 * 15);
-      existingUser.passwordResetExpires = new Date(Date.now() + 1000 * 30);
+      existingUser.passwordResetExpires = new Date(Date.now() + 1000 * 60 * 15);
 
       await this.usersRepo.save(existingUser);
 
-      return {
-        success: true,
-        message: 'Password reset link has been sent to your email.',
-      };
+      return new ResponseBuilder().status(200).message('Password reset link has been sent to your email.').data(null).build();
     } catch (error) {
       throw new RpcException({
         code: status.INTERNAL,
@@ -93,7 +92,7 @@ export class UsersService {
 
       await this.usersRepo.save(existingUser);
 
-      return await this.issueTokens({ id: existingUser.id });
+      return new ResponseBuilder().status(200).message('Your password has been reset successfully.').build();
     } catch (error) {
       throw new RpcException({
         code: status.INTERNAL,
@@ -117,7 +116,9 @@ export class UsersService {
         throw new RpcException({ code: status.UNAUTHENTICATED, message: 'Invalid refresh token' });
       }
 
-      return await this.issueTokens({ id });
+      const tokens = await this.issueTokens({ id });
+
+      return new ResponseBuilder().status(200).message('Your refresh token has been validated successfully.').data(tokens).build();
     } catch (err) {
       if (err.name === 'TokenExpiredError') {
         throw new RpcException({ code: status.UNAUTHENTICATED, message: 'Refresh token expired' });
@@ -134,7 +135,9 @@ export class UsersService {
         throw new RpcException({ code: status.INVALID_ARGUMENT, message: 'Invalid credentials' });
       }
 
-      return await this.issueTokens({ id: user.id });
+      const tokens = await this.issueTokens({ id: user.id });
+
+      return new ResponseBuilder().status(200).message('Welcome aboard! You have successfully logged in.').data(tokens).build();
     } catch (err) {
       if (err instanceof RpcException) throw err;
       throw new RpcException({ code: status.INTERNAL, message: 'Login failed' });

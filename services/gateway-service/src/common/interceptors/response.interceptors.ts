@@ -15,38 +15,13 @@ export interface ResponseFormat<T> {
 export class ResponseInterceptor<T> implements NestInterceptor<T, ResponseFormat<T>> {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
-      map((response) => {
-        const status = response?.status ?? true;
-        const statusCode = response?.statusCode ?? 200;
-        const message = response?.message ?? 'Request successful';
-        const payload = response?.payload ?? response ?? null;
-
-        console.log(payload);
-
-        const httpCtx = context.switchToHttp();
-        const res = httpCtx.getResponse();
-        console.log(res);
-
-        if (res?.cookie) {
-          res.cookie('refreshToken', payload.refreshToken, {
-            httpOnly: true,
-            secure: false,
-            sameSite: 'none',
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-          });
-        }
-
-        return { status, statusCode, message, payload };
-      }),
-
       catchError((error) => {
-        console.log(error);
         const httpStatus = this.mapGrpcCodeToHttp(error.code);
         const message = error.details || this.defaultMessage(error.code);
 
         return throwError(() => ({
-          status: false,
           statusCode: httpStatus,
+          status: false,
           message,
           payload: null,
         }));

@@ -12,7 +12,7 @@ import { ResetPasswordDto } from 'src/common/dtos/reset-password.dto';
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
-  @GrpcMethod('UserService', 'Signup')
+  @GrpcMethod('UserService', 'SignUp')
   signup(data: any) {
     return this.userService.signup(data);
   }

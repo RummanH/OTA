@@ -13,7 +13,7 @@ export class UsersService {
   }
 
   async signup(data: any) {
-    return this.userService.Signup(data);
+    return this.userService.SignUp(data);
   }
 
   login(data: any) {

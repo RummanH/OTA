@@ -14,39 +14,51 @@ enum UserRole {
   ROLE_ADMIN = 1;
 }
 
-message SignupRequest {
+message Tokens {
+  string accessToken = 1;
+  string refreshToken = 2;
+}
+
+message AuthResponse {
+  int32 statusCode = 1;
+  bool success = 2;
+  string message = 3;
+  Tokens payload = 4;          
+}
+
+message ForgotResponse {
+  int32 statusCode = 1;
+  bool success = 2;
+  string message = 3;        
+}
+
+message SignUpRequest {
   string email = 1;
   string phoneNumber = 2;
   string password = 3;
   string passwordConfirm = 4;
-  optional string firstName = 5;
-  optional string lastName = 6;
-  optional UserType userType = 7;
-  optional string companyName = 8;
-  optional string companyAddress = 9;
-  optional string district = 10;
-  optional string city = 11;
-  optional string establishedAt = 12;
-  optional string tradeLicenseNumber = 13;
-  optional string tradeLicenseFileUrl = 14;
-  optional string tinNumber = 15;
-  optional string tinCertificateUrl = 16;
-  optional string nidNumber = 17;
-  optional string nidFrontUrl = 18;
-  optional string nidBackUrl = 19;
-  optional string civilAviationCertUrl = 20;
+  string firstName = 5;
+  string lastName = 6;
+  UserType userType = 7;
+  string companyName = 8;
+  string companyAddress = 9;
+  string district = 10;
+  string city = 11;
+  string establishedAt = 12;
+  string tradeLicenseNumber = 13;
+  string tradeLicenseFileUrl = 14;
+  string tinNumber = 15;
+  string tinCertificateUrl = 16;
+  string nidNumber = 17;
+  string nidFrontUrl = 18;
+  string nidBackUrl = 19;
+  string civilAviationCertUrl = 20;
 }
 
 message LoginRequest {
   string email = 1;
   string password = 2;
 }
-
-message AuthResponse {
-  string accessToken = 1;
-  string refreshToken = 2;
-}
-
 
 message RefreshRequest {
   string refreshToken = 1;
@@ -56,22 +68,19 @@ message ForgotRequest {
   string email = 1;
 }
 
-message ForgotResponse {
-  string message = 1;
-}
-
 message ResetPasswordRequest {
   string token = 1;
   string newPassword = 2;
 }
 
 message ResetPasswordResponse {
-  string accessToken = 1;
-  string refreshToken = 2;
+  int32 statusCode = 1;
+  bool success = 2;
+  string message = 3;
 }
 
 service UserService {
-  rpc Signup(SignupRequest) returns (AuthResponse);
+  rpc SignUp(SignUpRequest) returns (AuthResponse);
   rpc Login(LoginRequest) returns (AuthResponse);
   rpc Refresh(RefreshRequest) returns (AuthResponse);
   rpc ForgotPassword(ForgotRequest) returns (ForgotResponse);
