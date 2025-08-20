@@ -86,7 +86,7 @@ export class UsersService {
         });
       }
 
-      existingUser.password = await hashValue(data.newPassword);
+      existingUser.password = await hashValue(data.password);
       existingUser.passwordResetExpires = null;
       existingUser.passwordResetToken = null;
 
