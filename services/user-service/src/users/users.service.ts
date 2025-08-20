@@ -8,6 +8,9 @@ import { JwtService } from '@nestjs/jwt';
 import { valueCompare, hashValue } from 'src/common/utils';
 import { SigninDto } from '../common/dtos/signin.dto';
 import { JWT_ACCESS_SECRET, JWT_ACCESS_TOKEN_EXP, JWT_REFRESH_SECRET, JWT_REFRESH_TOKEN_EXP, USER_REPOSITORY } from 'src/common/constants';
+import { ForgotDto } from 'src/common/dtos/forgot.dto';
+import { randomBytes } from 'node:crypto';
+import { ResetPasswordDto } from 'src/common/dtos/reset-password.dto';
 
 @Injectable()
 export class UsersService {
@@ -33,6 +36,69 @@ export class UsersService {
     } catch (err) {
       if (err instanceof RpcException) throw err;
       throw new RpcException({ code: status.INTERNAL, message: 'Signup failed' });
+    }
+  }
+
+  async forgotPassword(forgotDto: ForgotDto) {
+    try {
+      const existingUser = await this.usersRepo.findOne({
+        where: { email: forgotDto.email },
+      });
+
+      if (!existingUser) {
+        throw new RpcException({
+          code: status.NOT_FOUND,
+          message: 'User with this email does not exist',
+        });
+      }
+
+      const resetToken = randomBytes(32).toString('hex');
+      existingUser.passwordResetToken = resetToken;
+      // existingUser.passwordResetExpires = new Date(Date.now() + 1000 * 60 * 15);
+      existingUser.passwordResetExpires = new Date(Date.now() + 1000 * 30);
+
+      await this.usersRepo.save(existingUser);
+
+      return {
+        success: true,
+        message: 'Password reset link has been sent to your email.',
+      };
+    } catch (error) {
+      throw new RpcException({
+        code: status.INTERNAL,
+        message: error?.message || 'An error occurred while processing forgot password',
+      });
+    }
+  }
+
+  async resetPassword(data: ResetPasswordDto) {
+    console.log(data);
+    try {
+      const existingUser = await this.usersRepo.findOne({
+        where: { passwordResetToken: data.token },
+      });
+
+      console.log(existingUser);
+
+      if (!existingUser || !existingUser.passwordResetExpires || existingUser.passwordResetExpires < new Date()) {
+        throw new RpcException({
+          code: status.INVALID_ARGUMENT,
+          message: 'Invalid or expired token',
+        });
+      }
+
+      existingUser.password = await hashValue(data.newPassword);
+      existingUser.passwordResetExpires = null;
+      existingUser.passwordResetToken = null;
+
+      await this.usersRepo.save(existingUser);
+
+      return await this.issueTokens({ id: existingUser.id });
+    } catch (error) {
+      throw new RpcException({
+        code: status.INTERNAL,
+        message: error?.message || 'An error occurred while resetting password',
+      });
     }
   }
 

@@ -21,4 +21,14 @@ export class UsersController {
   refreshToken(@Body() refreshTokenDto: RefreshTokenDto) {
     return this.usersService.refreshToken(refreshTokenDto);
   }
+
+  @Post('forgotPassword')
+  forgotPassword(@Body() forgotDto: any) {
+    return this.usersService.forgotPassword(forgotDto);
+  }
+
+  @Post('resetPassword')
+  resetPassword(@Body() forgotDto: any) {
+    return this.usersService.resetPassword(forgotDto);
+  }
 }

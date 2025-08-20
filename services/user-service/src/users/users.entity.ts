@@ -36,11 +36,11 @@ export class UserEntity {
   @Column({ type: 'timestamp', nullable: true })
   passwordChangedAt: Date;
 
-  @Column({ nullable: true })
-  passwordResetToken: string;
+  @Column({ type: 'varchar', nullable: true })
+  passwordResetToken: string | null;
 
   @Column({ type: 'timestamp', nullable: true })
-  passwordResetExpires: Date;
+  passwordResetExpires: Date | null;
 
   @Column({ nullable: true })
   resetToken: string;
@@ -128,8 +128,6 @@ export class UserEntity {
 
   @BeforeInsert()
   async hashPassword() {
-    const hashedPassword = await hashValue(this.password);
-    console.log(hashedPassword);
-    this.password = hashedPassword;
+    this.password = await hashValue(this.password);
   }
 }

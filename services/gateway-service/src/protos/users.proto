@@ -52,8 +52,28 @@ message RefreshRequest {
   string refreshToken = 1;
 }
 
+message ForgotRequest {
+  string email = 1;
+}
+
+message ForgotResponse {
+  string message = 1;
+}
+
+message ResetPasswordRequest {
+  string token = 1;
+  string newPassword = 2;
+}
+
+message ResetPasswordResponse {
+  string accessToken = 1;
+  string refreshToken = 2;
+}
+
 service UserService {
   rpc Signup(SignupRequest) returns (AuthResponse);
   rpc Login(LoginRequest) returns (AuthResponse);
   rpc Refresh(RefreshRequest) returns (AuthResponse);
+  rpc ForgotPassword(ForgotRequest) returns (ForgotResponse);
+  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
 }

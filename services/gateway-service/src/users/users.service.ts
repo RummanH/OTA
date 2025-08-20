@@ -23,4 +23,12 @@ export class UsersService {
   refreshToken(data: any) {
     return this.userService.Refresh(data);
   }
+
+  forgotPassword(data: any) {
+    return this.userService.ForgotPassword(data);
+  }
+
+  resetPassword(data: any) {
+    return this.userService.ResetPassword(data);
+  }
 }
