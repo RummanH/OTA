@@ -3,6 +3,8 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+
 
 namespace BookingService.Messaging
 {
@@ -12,6 +14,15 @@ namespace BookingService.Messaging
         private readonly string _queueName;
         private readonly IConnection _connection;
         private readonly IModel _channel;
+
+        public class RabbitEnvelope
+        {
+            [JsonPropertyName("pattern")]
+            public required string Pattern { get; set; }
+            [JsonPropertyName("data")]
+            public required string Data { get; set; }
+        }
+
 
         public RabbitMqConsumer(IServiceProvider serviceProvider, IConfiguration configuration)
         {
@@ -47,18 +58,31 @@ namespace BookingService.Messaging
             {
                 try
                 {
+
+
+
+
                     var body = e.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
-                    var request = JsonSerializer.Deserialize<BookFlightMessage>(message);
+                    var envelope = JsonSerializer.Deserialize<RabbitEnvelope>(message);
 
-                    if (request != null)
+
+                    if (envelope != null)
                     {
-                        using var scope = _serviceProvider.CreateScope();
-                        var service = scope.ServiceProvider.GetRequiredService<BookingServiceLayer>();
 
-                        var booking = await service.CreateBookingAsync(request.FlightNumber, request.PassengerName);
+                        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                        var request = JsonSerializer.Deserialize<BookFlightMessage>(envelope.Data, options);
 
-                        Console.WriteLine($"✅ Booking created via RabbitMQ: Id={booking.Id}, Flight={booking.FlightNumber}, Passenger={booking.PassengerName}");
+
+
+                        if (request != null)
+                        {
+                            Console.WriteLine($"📥 FlightNumber: {request.FlightNumber}, PassengerName: {request.PassengerName}");
+                            using var scope = _serviceProvider.CreateScope();
+                            var service = scope.ServiceProvider.GetRequiredService<BookingServiceLayer>();
+
+                            var booking = await service.CreateBookingAsync(request.FlightNumber, request.PassengerName);
+                        }
                     }
                 }
                 catch (Exception ex)

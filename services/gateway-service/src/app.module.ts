@@ -6,11 +6,13 @@ import { FlightsModule } from './flights/flights.module';
 import { ResponseInterceptor } from './common/interceptors/response.interceptors';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { ConfigModule } from '@nestjs/config';
+import { BookingsModule } from './bookings/bookings.module';
 
 @Module({
   imports: [
     UsersModule,
     FlightsModule,
+    BookingsModule,
     ThrottlerModule.forRoot({
       throttlers: [{ ttl: 60000, limit: 10 }],
     }),
