@@ -1,0 +1,19 @@
+# Build artifacts
+bin/
+obj/
+*.dll
+*.exe
+*.db-wal
+*.db-shm
+
+# Local databases
+*.db
+
+# Visual Studio / Rider / IDE files
+.vs/
+*.user
+*.suo
+*.idea/
+
+# Logs and temporary files
+*.log
